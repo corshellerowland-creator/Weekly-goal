@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Goal Tracker Upgrade</title>
+<title>Live Goal Tracker - Points Upgrade</title>
 <style>
 :root{
   --bg1:#060915; --bg2:#0d1230; --card:#121834; --card2:#18204a; --text:#f4f7ff; --muted:#aeb7d7;
@@ -106,7 +106,7 @@ summary::-webkit-details-marker{display:none}
   <div class="card hero">
     <div class="section-title">Faceless Trader</div>
     <h1>Live Goal Tracker</h1>
-    <p>Upgraded with save entry, history, edit entry, and weekly auto-summary.</p>
+    <p>Points-based version. Enter points won and points lost, and the app calculates profit, loss, and net automatically.</p>
   </div>
 
   <div class="card">
@@ -222,19 +222,30 @@ summary::-webkit-details-marker{display:none}
           <input id="entryDate" type="date">
         </div>
         <div>
-          <label>Points Captured</label>
-          <input id="pointsCaptured" type="number" step="0.1" value="0">
+          <label>Points Captured (Net)</label>
+          <input id="pointsCaptured" type="number" step="0.1" value="0" readonly>
         </div>
       </div>
 
       <div class="row2">
         <div>
-          <label>Today's Profit ($)</label>
-          <input id="todayProfit" type="number" step="0.01" value="0">
+          <label>Points Won</label>
+          <input id="pointsWon" type="number" step="0.1" value="0">
         </div>
         <div>
-          <label>Today's Loss ($)</label>
-          <input id="todayLoss" type="number" step="0.01" value="0">
+          <label>Points Lost</label>
+          <input id="pointsLost" type="number" step="0.1" value="0">
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label>Profit ($)</label>
+          <input id="todayProfit" type="number" step="0.01" value="0" readonly>
+        </div>
+        <div>
+          <label>Loss ($)</label>
+          <input id="todayLoss" type="number" step="0.01" value="0" readonly>
         </div>
       </div>
 
@@ -332,10 +343,44 @@ summary::-webkit-details-marker{display:none}
 </div>
 
 <script>
-const suggested = {"1": {"goal": 10, "contracts": 1, "type": "MNQ", "start": 200, "withdraw": 215, "days": 1}, "2": {"goal": 40, "contracts": 1, "type": "MNQ", "start": 210, "withdraw": 260, "days": 5}, "3": {"goal": 50, "contracts": 1, "type": "MNQ", "start": 250, "withdraw": 310, "days": 5}, "4": {"goal": 65, "contracts": 1, "type": "MNQ", "start": 300, "withdraw": 380, "days": 5}, "5": {"goal": 80, "contracts": 1, "type": "MNQ", "start": 365, "withdraw": 460, "days": 5}, "6": {"goal": 100, "contracts": 2, "type": "MNQ", "start": 445, "withdraw": 575, "days": 5}, "7": {"goal": 130, "contracts": 2, "type": "MNQ", "start": 545, "withdraw": 710, "days": 5}, "8": {"goal": 170, "contracts": 3, "type": "MNQ", "start": 675, "withdraw": 890, "days": 5}, "9": {"goal": 215, "contracts": 3, "type": "MNQ", "start": 845, "withdraw": 1120, "days": 5}, "10": {"goal": 270, "contracts": 4, "type": "MNQ", "start": 1060, "withdraw": 1400, "days": 5}, "11": {"goal": 340, "contracts": 4, "type": "MNQ", "start": 1330, "withdraw": 1760, "days": 5}, "12": {"goal": 430, "contracts": 5, "type": "MNQ", "start": 1670, "withdraw": 2200, "days": 5}, "13": {"goal": 540, "contracts": 5, "type": "MNQ", "start": 2100, "withdraw": 2750, "days": 5}, "14": {"goal": 680, "contracts": 8, "type": "MNQ", "start": 2640, "withdraw": 3450, "days": 5}, "15": {"goal": 850, "contracts": 10, "type": "MNQ", "start": 3320, "withdraw": 4300, "days": 5}, "16": {"goal": 1060, "contracts": 10, "type": "MNQ", "start": 4170, "withdraw": 5400, "days": 5}, "17": {"goal": 1300, "contracts": 12, "type": "MNQ", "start": 5230, "withdraw": 6750, "days": 5}, "18": {"goal": 1580, "contracts": 15, "type": "MNQ", "start": 6530, "withdraw": 8400, "days": 5}, "19": {"goal": 2000, "contracts": 20, "type": "MNQ", "start": 8110, "withdraw": 10500, "days": 5}, "20": {"goal": 2500, "contracts": 25, "type": "MNQ", "start": 10110, "withdraw": 13100, "days": 5}, "21": {"goal": 3200, "contracts": 30, "type": "MNQ", "start": 12610, "withdraw": 16400, "days": 5}, "22": {"goal": 4000, "contracts": 4, "type": "NQ", "start": 15810, "withdraw": 20500, "days": 5}, "23": {"goal": 5000, "contracts": 5, "type": "NQ", "start": 19810, "withdraw": 25700, "days": 5}, "24": {"goal": 6200, "contracts": 6, "type": "NQ", "start": 24810, "withdraw": 32000, "days": 5}, "25": {"goal": 7700, "contracts": 7, "type": "NQ", "start": 31010, "withdraw": 40000, "days": 5}, "26": {"goal": 10000, "contracts": 10, "type": "NQ", "start": 38710, "withdraw": 50000, "days": 5}, "27": {"goal": 12500, "contracts": 12, "type": "NQ", "start": 48710, "withdraw": 63000, "days": 5}, "28": {"goal": 15000, "contracts": 15, "type": "NQ", "start": 61210, "withdraw": 77000, "days": 5}, "29": {"goal": 18000, "contracts": 18, "type": "NQ", "start": 76210, "withdraw": 96000, "days": 5}, "30": {"goal": 20000, "contracts": 20, "type": "NQ", "start": 94210, "withdraw": 115000, "days": 5}, "31": {"goal": 22000, "contracts": 22, "type": "NQ", "start": 114210, "withdraw": 136000, "days": 5}, "32": {"goal": 25000, "contracts": 25, "type": "NQ", "start": 136210, "withdraw": 161500, "days": 5}};
-const formIds = ['week','weeklyGoal','tradingDays','startBalance','withdrawAbove','contractType','contracts','targetPts','maxLoss','todayProfit','todayLoss','todayWithdrawn','entryDate','pointsCaptured','endBalanceManual','executionTag','followedPlan','entryNotes'];
-const stateKey = 'liveGoalTrackerUpgradeStateV1';
-const historyKey = 'liveGoalTrackerUpgradeHistoryV1';
+const suggested = {
+1:{goal:10,contracts:1,type:'MNQ',start:200,withdraw:215,days:1},
+2:{goal:40,contracts:1,type:'MNQ',start:210,withdraw:260,days:5},
+3:{goal:50,contracts:1,type:'MNQ',start:250,withdraw:310,days:5},
+4:{goal:65,contracts:1,type:'MNQ',start:300,withdraw:380,days:5},
+5:{goal:80,contracts:1,type:'MNQ',start:365,withdraw:460,days:5},
+6:{goal:100,contracts:2,type:'MNQ',start:445,withdraw:575,days:5},
+7:{goal:130,contracts:2,type:'MNQ',start:545,withdraw:710,days:5},
+8:{goal:170,contracts:3,type:'MNQ',start:675,withdraw:890,days:5},
+9:{goal:215,contracts:3,type:'MNQ',start:845,withdraw:1120,days:5},
+10:{goal:270,contracts:4,type:'MNQ',start:1060,withdraw:1400,days:5},
+11:{goal:340,contracts:4,type:'MNQ',start:1330,withdraw:1760,days:5},
+12:{goal:430,contracts:5,type:'MNQ',start:1670,withdraw:2200,days:5},
+13:{goal:540,contracts:5,type:'MNQ',start:2100,withdraw:2750,days:5},
+14:{goal:680,contracts:8,type:'MNQ',start:2640,withdraw:3450,days:5},
+15:{goal:850,contracts:10,type:'MNQ',start:3320,withdraw:4300,days:5},
+16:{goal:1060,contracts:10,type:'MNQ',start:4170,withdraw:5400,days:5},
+17:{goal:1300,contracts:12,type:'MNQ',start:5230,withdraw:6750,days:5},
+18:{goal:1580,contracts:15,type:'MNQ',start:6530,withdraw:8400,days:5},
+19:{goal:2000,contracts:20,type:'MNQ',start:8110,withdraw:10500,days:5},
+20:{goal:2500,contracts:25,type:'MNQ',start:10110,withdraw:13100,days:5},
+21:{goal:3200,contracts:30,type:'MNQ',start:12610,withdraw:16400,days:5},
+22:{goal:4000,contracts:4,type:'NQ',start:15810,withdraw:20500,days:5},
+23:{goal:5000,contracts:5,type:'NQ',start:19810,withdraw:25700,days:5},
+24:{goal:6200,contracts:6,type:'NQ',start:24810,withdraw:32000,days:5},
+25:{goal:7700,contracts:7,type:'NQ',start:31010,withdraw:40000,days:5},
+26:{goal:10000,contracts:10,type:'NQ',start:38710,withdraw:50000,days:5},
+27:{goal:12500,contracts:12,type:'NQ',start:48710,withdraw:63000,days:5},
+28:{goal:15000,contracts:15,type:'NQ',start:61210,withdraw:77000,days:5},
+29:{goal:18000,contracts:18,type:'NQ',start:76210,withdraw:96000,days:5},
+30:{goal:20000,contracts:20,type:'NQ',start:94210,withdraw:115000,days:5},
+31:{goal:22000,contracts:22,type:'NQ',start:114210,withdraw:136000,days:5},
+32:{goal:25000,contracts:25,type:'NQ',start:136210,withdraw:161500,days:5}
+};
+
+const formIds = ['week','weeklyGoal','tradingDays','startBalance','withdrawAbove','contractType','contracts','targetPts','maxLoss','todayWithdrawn','entryDate','pointsWon','pointsLost','endBalanceManual','executionTag','followedPlan','entryNotes'];
+const stateKey = 'liveGoalTrackerPointsStateV1';
+const historyKey = 'liveGoalTrackerPointsHistoryV1';
 let editingId = null;
 let historyFilter = 'all';
 
@@ -353,6 +398,25 @@ function getTodayString(){
 function openAndScroll(idx){
   const items = document.querySelectorAll('details');
   if(items[idx]){ items[idx].open = true; items[idx].scrollIntoView({behavior:'smooth'}); }
+}
+
+function dollarsPerPoint(){
+  const pointValue = Number(document.getElementById('contractType').value || 2);
+  const contracts = Math.max(1, Number(document.getElementById('contracts').value || 1));
+  return pointValue * contracts;
+}
+
+function recalcPointMoney(){
+  const won = Number(document.getElementById('pointsWon').value || 0);
+  const lost = Number(document.getElementById('pointsLost').value || 0);
+  const dpp = dollarsPerPoint();
+  const profit = won * dpp;
+  const loss = lost * dpp;
+  const netPts = won - lost;
+
+  document.getElementById('todayProfit').value = profit.toFixed(2);
+  document.getElementById('todayLoss').value = loss.toFixed(2);
+  document.getElementById('pointsCaptured').value = netPts.toFixed(1);
 }
 
 function saveState(){
@@ -389,9 +453,8 @@ function resetCurrentState(){
 
 function clearEntryForm(){
   document.getElementById('entryDate').value = getTodayString();
-  document.getElementById('pointsCaptured').value = 0;
-  document.getElementById('todayProfit').value = 0;
-  document.getElementById('todayLoss').value = 0;
+  document.getElementById('pointsWon').value = 0;
+  document.getElementById('pointsLost').value = 0;
   document.getElementById('todayWithdrawn').value = 0;
   document.getElementById('endBalanceManual').value = '';
   document.getElementById('executionTag').value = 'Clean Execution';
@@ -399,6 +462,7 @@ function clearEntryForm(){
   document.getElementById('entryNotes').value = '';
   editingId = null;
   document.getElementById('saveBtn').textContent = 'Save Entry';
+  recalcPointMoney();
   saveState();
   calc();
 }
@@ -421,6 +485,7 @@ function loadSuggestedWeek(){
   document.getElementById('withdrawAbove').value = s.withdraw;
   document.getElementById('tradingDays').value = s.days;
   document.getElementById('weekQuickSelect').value = wk;
+  recalcPointMoney();
   saveState();
   calc();
 }
@@ -443,6 +508,8 @@ function saveEntry(){
   const contractType = Number(document.getElementById('contractType').value || 2) === 2 ? 'MNQ' : 'NQ';
   const contracts = Number(document.getElementById('contracts').value || 0);
   const points = Number(document.getElementById('pointsCaptured').value || 0);
+  const pointsWon = Number(document.getElementById('pointsWon').value || 0);
+  const pointsLost = Number(document.getElementById('pointsLost').value || 0);
   const profit = Number(document.getElementById('todayProfit').value || 0);
   const loss = Number(document.getElementById('todayLoss').value || 0);
   const net = profit - loss;
@@ -456,7 +523,7 @@ function saveEntry(){
 
   const entry = {
     id: editingId || 'id_' + Date.now(),
-    date, week, contractType, contracts, points, profit, loss, net, withdrawn, endBalance,
+    date, week, contractType, contracts, points, pointsWon, pointsLost, profit, loss, net, withdrawn, endBalance,
     followedPlan, executionTag, notes,
     updatedAt: new Date().toISOString()
   };
@@ -483,15 +550,15 @@ function editEntry(id){
   if(suggested[entry.week]) loadSuggestedWeek();
   document.getElementById('contractType').value = entry.contractType === 'MNQ' ? 2 : 20;
   document.getElementById('contracts').value = entry.contracts;
-  document.getElementById('pointsCaptured').value = entry.points;
-  document.getElementById('todayProfit').value = entry.profit;
-  document.getElementById('todayLoss').value = entry.loss;
+  document.getElementById('pointsWon').value = Number(entry.pointsWon || 0);
+  document.getElementById('pointsLost').value = Number(entry.pointsLost || 0);
   document.getElementById('todayWithdrawn').value = entry.withdrawn;
   document.getElementById('endBalanceManual').value = entry.endBalance;
   document.getElementById('followedPlan').value = entry.followedPlan;
   document.getElementById('executionTag').value = entry.executionTag;
   document.getElementById('entryNotes').value = entry.notes || '';
   document.getElementById('saveBtn').textContent = 'Update Entry';
+  recalcPointMoney();
   calc();
   openAndScroll(1);
 }
@@ -521,7 +588,7 @@ function renderHistory(){
         <div class="entry-head">
           <div>
             <div class="entry-title">${entry.date} · Week ${entry.week}</div>
-            <div class="entry-sub">${entry.contracts} ${entry.contractType} · ${entry.points} pts · End ${fmt(entry.endBalance)}</div>
+            <div class="entry-sub">${entry.contracts} ${entry.contractType} · Won ${Number(entry.pointsWon||0).toFixed(1)} pts · Lost ${Number(entry.pointsLost||0).toFixed(1)} pts · Net ${Number(entry.points||0).toFixed(1)} pts</div>
           </div>
           <div style="font-weight:800">${fmt(entry.net)}</div>
         </div>
@@ -601,23 +668,20 @@ function renderPlan(){
 }
 
 function calc(){
-  const week = Number(document.getElementById('week').value || 0);
+  recalcPointMoney();
   const weeklyGoal = Number(document.getElementById('weeklyGoal').value || 0);
   const tradingDays = Math.max(1, Number(document.getElementById('tradingDays').value || 1));
   const startBalance = Number(document.getElementById('startBalance').value || 0);
   const withdrawAbove = Number(document.getElementById('withdrawAbove').value || 0);
-  const pointValue = Number(document.getElementById('contractType').value || 2);
-  const contracts = Math.max(1, Number(document.getElementById('contracts').value || 1));
-  const targetPts = Number(document.getElementById('targetPts').value || 0);
   const maxLoss = Number(document.getElementById('maxLoss').value || 0);
   const todayProfit = Number(document.getElementById('todayProfit').value || 0);
   const todayLoss = Number(document.getElementById('todayLoss').value || 0);
   const todayWithdrawn = Number(document.getElementById('todayWithdrawn').value || 0);
 
   const dailyGoal = weeklyGoal / tradingDays;
-  const dollarsPerPoint = pointValue * contracts;
-  const pointsNeeded = dollarsPerPoint > 0 ? dailyGoal / dollarsPerPoint : 0;
-  const tenPointValue = dollarsPerPoint * 10;
+  const dpp = dollarsPerPoint();
+  const pointsNeeded = dpp > 0 ? dailyGoal / dpp : 0;
+  const tenPointValue = dpp * 10;
   const todayNet = todayProfit - todayLoss;
   const progress = dailyGoal > 0 ? Math.max(0, Math.min(100, (todayNet / dailyGoal) * 100)) : 0;
   const currentBalance = startBalance + todayNet - todayWithdrawn;
@@ -653,6 +717,8 @@ if(!document.getElementById('entryDate').value) document.getElementById('entryDa
 renderPlan();
 document.getElementById('weekQuickSelect').value = document.getElementById('week').value || 1;
 formIds.forEach(id => document.getElementById(id).addEventListener('input', calc));
+document.getElementById('contractType').addEventListener('change', calc);
+document.getElementById('contracts').addEventListener('input', calc);
 calc();
 renderHistory();
 </script>
