@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Goal Tracker Mobile</title>
+<title>Live Goal Tracker Upgrade</title>
 <style>
 :root{
   --bg1:#060915; --bg2:#0d1230; --card:#121834; --card2:#18204a; --text:#f4f7ff; --muted:#aeb7d7;
@@ -15,7 +15,7 @@ body{
   margin:0; color:var(--text); font-family:Inter,Arial,Helvetica,sans-serif;
   background:radial-gradient(circle at top, #0d163a 0%, #080b19 46%, #05070f 100%);
 }
-.wrap{max-width:520px; margin:0 auto; padding:14px 14px 90px;}
+.wrap{max-width:560px; margin:0 auto; padding:14px 14px 110px;}
 .card{
   background:linear-gradient(180deg, rgba(24,32,74,.96), rgba(13,18,48,.96));
   border:1px solid rgba(86,100,178,.35);
@@ -26,12 +26,12 @@ body{
 .hero p{margin:0; color:var(--muted); line-height:1.4; font-size:14px}
 .section-title{font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:#c7d1ff; margin:0 0 10px}
 label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
-input,select{
+input,select,textarea{
   width:100%; background:#090d22; color:var(--text); border:1px solid var(--line);
   border-radius:16px; padding:14px 14px; font-size:16px; outline:none;
 }
+textarea{min-height:84px; resize:vertical}
 .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-.row3{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .kpis{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .kpi{
   background:#090d22; border:1px solid var(--line); border-radius:18px; padding:14px;
@@ -51,43 +51,54 @@ input,select{
 .status.good{background:rgba(43,213,118,.12);border-color:rgba(43,213,118,.38);color:#8effbc}
 .status.bad{background:rgba(255,107,107,.12);border-color:rgba(255,107,107,.38);color:#ffaaaa}
 .actions{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+.actions3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:12px}
 button{
   width:100%; border:none; border-radius:16px; padding:14px 12px; font-size:14px; font-weight:800; cursor:pointer;
 }
 .primary{background:linear-gradient(90deg,var(--pink),var(--cyan)); color:white}
 .secondary{background:#090d22; color:white; border:1px solid var(--line)}
+.warnbtn{background:rgba(243,180,97,.14); color:#ffd08e; border:1px solid rgba(243,180,97,.35)}
 .summary-list{display:grid; gap:10px}
 .summary-item{
   display:flex; justify-content:space-between; gap:10px; align-items:center;
   background:#090d22; border:1px solid var(--line); border-radius:16px; padding:12px 14px;
 }
 .summary-item span:first-child{color:var(--muted); font-size:13px}
-.summary-item span:last-child{font-weight:800}
+.summary-item span:last-child{font-weight:800; text-align:right}
+details{border:1px solid rgba(86,100,178,.35); border-radius:18px; background:rgba(18,24,52,.8); margin-bottom:12px; overflow:hidden}
+summary{list-style:none; cursor:pointer; padding:16px; font-weight:800; font-size:18px}
+summary::-webkit-details-marker{display:none}
+.details-content{padding:0 16px 16px}
 .plan-picker{display:flex; gap:10px; align-items:center}
 .plan-picker select{flex:1}
 .plan-note{font-size:13px; color:var(--muted); margin-top:8px}
-details{border:1px solid rgba(86,100,178,.35); border-radius:18px; background:rgba(18,24,52,.8); margin-bottom:12px; overflow:hidden}
-summary{
-  list-style:none; cursor:pointer; padding:16px; font-weight:800; font-size:18px;
-}
-summary::-webkit-details-marker{display:none}
-.details-content{padding:0 16px 16px}
-.plan-grid{display:grid; gap:8px; max-height:360px; overflow:auto; padding-right:4px}
+.plan-grid{display:grid; gap:8px; max-height:320px; overflow:auto; padding-right:4px; margin-top:10px}
 .plan-row{
   display:grid; grid-template-columns:56px 1fr auto auto; gap:8px; align-items:center;
   background:#090d22; border:1px solid var(--line); border-radius:14px; padding:10px 12px; font-size:13px;
 }
 .plan-row .muted{color:var(--muted)}
-.footer-space{height:10px}
+.history-grid{display:grid; gap:10px; margin-top:10px}
+.entry-card{
+  background:#090d22; border:1px solid var(--line); border-radius:18px; padding:14px;
+}
+.entry-head{display:flex; justify-content:space-between; gap:8px; align-items:flex-start; margin-bottom:10px}
+.entry-title{font-weight:800; font-size:16px}
+.entry-sub{font-size:12px; color:var(--muted); margin-top:3px}
+.entry-tags{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0}
+.tag{font-size:12px; padding:8px 10px; border-radius:999px; background:#111733; border:1px solid var(--line); color:#dbe5ff}
+.tag.good{color:#9effc3; border-color:rgba(43,213,118,.35); background:rgba(43,213,118,.08)}
+.tag.bad{color:#ffb1b1; border-color:rgba(255,107,107,.35); background:rgba(255,107,107,.08)}
+.tag.warn{color:#ffd08e; border-color:rgba(243,180,97,.35); background:rgba(243,180,97,.08)}
+.entry-actions{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px}
+.small-note{font-size:12px; color:var(--muted); line-height:1.35}
 .sticky-nav{
   position:fixed; left:0; right:0; bottom:0; background:rgba(6,9,21,.92); backdrop-filter: blur(12px);
   border-top:1px solid rgba(86,100,178,.35); padding:10px 14px 14px;
 }
-.sticky-wrap{max-width:520px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px}
+.sticky-wrap{max-width:560px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px}
 .sticky-btn{background:#0a0f25; border:1px solid var(--line); color:white; border-radius:14px; padding:12px; text-align:center; font-size:12px; font-weight:800}
-@media (min-width:700px){
-  .wrap{max-width:900px}
-}
+.empty{padding:14px; border:1px dashed var(--line); border-radius:16px; color:var(--muted); text-align:center}
 </style>
 </head>
 <body>
@@ -95,7 +106,7 @@ summary::-webkit-details-marker{display:none}
   <div class="card hero">
     <div class="section-title">Faceless Trader</div>
     <h1>Live Goal Tracker</h1>
-    <p>Mobile-first version. Clean, stacked, and easy to use while trading.</p>
+    <p>Upgraded with save entry, history, edit entry, and weekly auto-summary.</p>
   </div>
 
   <div class="card">
@@ -132,7 +143,7 @@ summary::-webkit-details-marker{display:none}
 
     <div style="margin-top:14px">
       <div class="label" style="margin:0 0 6px">Goal Progress</div>
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap">
         <div style="font-weight:800; font-size:22px" id="progressText">0%</div>
         <div id="statusOut" class="status">ALLOWED TO TRADE</div>
       </div>
@@ -197,7 +208,7 @@ summary::-webkit-details-marker{display:none}
 
       <div class="actions">
         <button class="primary" onclick="loadSuggestedWeek()">Load This Week</button>
-        <button class="secondary" onclick="resetAll()">Reset Saved Data</button>
+        <button class="secondary" onclick="resetCurrentState()">Reset Live Fields</button>
       </div>
     </div>
   </details>
@@ -205,6 +216,17 @@ summary::-webkit-details-marker{display:none}
   <details open>
     <summary>Today's Entry</summary>
     <div class="details-content">
+      <div class="row2">
+        <div>
+          <label>Date</label>
+          <input id="entryDate" type="date">
+        </div>
+        <div>
+          <label>Points Captured</label>
+          <input id="pointsCaptured" type="number" step="0.1" value="0">
+        </div>
+      </div>
+
       <div class="row2">
         <div>
           <label>Today's Profit ($)</label>
@@ -215,26 +237,76 @@ summary::-webkit-details-marker{display:none}
           <input id="todayLoss" type="number" step="0.01" value="0">
         </div>
       </div>
+
+      <div class="row2">
+        <div>
+          <label>Today's Withdrawn ($)</label>
+          <input id="todayWithdrawn" type="number" step="0.01" value="0">
+        </div>
+        <div>
+          <label>End Balance ($)</label>
+          <input id="endBalanceManual" type="number" step="0.01" placeholder="Optional">
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label>Execution Tag</label>
+          <select id="executionTag">
+            <option value="Clean Execution">Clean Execution</option>
+            <option value="Mistake">Mistake</option>
+            <option value="Revenge">Revenge</option>
+            <option value="No Trade">No Trade</option>
+          </select>
+        </div>
+        <div>
+          <label>Followed Plan?</label>
+          <select id="followedPlan">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+      </div>
+
       <div>
-        <label>Today's Withdrawn ($)</label>
-        <input id="todayWithdrawn" type="number" step="0.01" value="0">
+        <label>Notes</label>
+        <textarea id="entryNotes" placeholder="What happened today?"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="saveBtn" onclick="saveEntry()">Save Entry</button>
+        <button class="secondary" onclick="clearEntryForm()">Clear Entry Form</button>
       </div>
     </div>
   </details>
 
-  <details>
-    <summary>Weekly Snapshot</summary>
+  <details open>
+    <summary>Weekly Auto Summary</summary>
     <div class="details-content">
       <div class="summary-list">
         <div class="summary-item"><span>Week</span><span id="wkField">1</span></div>
-        <div class="summary-item"><span>Start Balance</span><span id="startField">$200.00</span></div>
         <div class="summary-item"><span>Weekly Goal</span><span id="goalField">$10.00</span></div>
-        <div class="summary-item"><span>Goal End Balance</span><span id="endGoalField">$210.00</span></div>
-        <div class="summary-item"><span>Withdraw Above</span><span id="withdrawField">$215.00</span></div>
-        <div class="summary-item"><span>Contracts</span><span id="contractsField">1</span></div>
-        <div class="summary-item"><span>Contract Type</span><span id="typeField">MNQ</span></div>
-        <div class="summary-item"><span>Target Points / Trade</span><span id="targetPtsField">10 pts</span></div>
+        <div class="summary-item"><span>Saved Entries This Week</span><span id="entriesCountField">0</span></div>
+        <div class="summary-item"><span>Total Profit</span><span id="sumProfitField">$0.00</span></div>
+        <div class="summary-item"><span>Total Loss</span><span id="sumLossField">$0.00</span></div>
+        <div class="summary-item"><span>Total Net</span><span id="sumNetField">$0.00</span></div>
+        <div class="summary-item"><span>Total Withdrawn</span><span id="sumWithdrawField">$0.00</span></div>
+        <div class="summary-item"><span>Total Points</span><span id="sumPointsField">0 pts</span></div>
+        <div class="summary-item"><span>Goal Progress This Week</span><span id="weekProgressField">0%</span></div>
       </div>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Saved History</summary>
+    <div class="details-content">
+      <p class="small-note">No single-delete for now so your history stays honest. You can edit entries, and if you ever need to wipe everything, use Clear All History.</p>
+      <div class="actions3">
+        <button class="secondary" onclick="toggleHistoryFilter('all')">All</button>
+        <button class="secondary" onclick="toggleHistoryFilter('current')">This Week</button>
+        <button class="warnbtn" onclick="clearAllHistory()">Clear All History</button>
+      </div>
+      <div class="history-grid" id="historyList"></div>
     </div>
   </details>
 
@@ -249,46 +321,93 @@ summary::-webkit-details-marker{display:none}
       <div class="plan-grid" id="planGrid"></div>
     </div>
   </details>
-
-  <div class="footer-space"></div>
 </div>
 
 <div class="sticky-nav">
   <div class="sticky-wrap">
     <button class="sticky-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Today</button>
-    <button class="sticky-btn" onclick="document.querySelectorAll('details')[0].open=true; document.querySelectorAll('details')[0].scrollIntoView({behavior:'smooth'})">Inputs</button>
-    <button class="sticky-btn" onclick="document.querySelectorAll('details')[3].open=true; document.querySelectorAll('details')[3].scrollIntoView({behavior:'smooth'})">Plan</button>
+    <button class="sticky-btn" onclick="openAndScroll(1)">Entry</button>
+    <button class="sticky-btn" onclick="openAndScroll(3)">History</button>
   </div>
 </div>
 
 <script>
 const suggested = {"1": {"goal": 10, "contracts": 1, "type": "MNQ", "start": 200, "withdraw": 215, "days": 1}, "2": {"goal": 40, "contracts": 1, "type": "MNQ", "start": 210, "withdraw": 260, "days": 5}, "3": {"goal": 50, "contracts": 1, "type": "MNQ", "start": 250, "withdraw": 310, "days": 5}, "4": {"goal": 65, "contracts": 1, "type": "MNQ", "start": 300, "withdraw": 380, "days": 5}, "5": {"goal": 80, "contracts": 1, "type": "MNQ", "start": 365, "withdraw": 460, "days": 5}, "6": {"goal": 100, "contracts": 2, "type": "MNQ", "start": 445, "withdraw": 575, "days": 5}, "7": {"goal": 130, "contracts": 2, "type": "MNQ", "start": 545, "withdraw": 710, "days": 5}, "8": {"goal": 170, "contracts": 3, "type": "MNQ", "start": 675, "withdraw": 890, "days": 5}, "9": {"goal": 215, "contracts": 3, "type": "MNQ", "start": 845, "withdraw": 1120, "days": 5}, "10": {"goal": 270, "contracts": 4, "type": "MNQ", "start": 1060, "withdraw": 1400, "days": 5}, "11": {"goal": 340, "contracts": 4, "type": "MNQ", "start": 1330, "withdraw": 1760, "days": 5}, "12": {"goal": 430, "contracts": 5, "type": "MNQ", "start": 1670, "withdraw": 2200, "days": 5}, "13": {"goal": 540, "contracts": 5, "type": "MNQ", "start": 2100, "withdraw": 2750, "days": 5}, "14": {"goal": 680, "contracts": 8, "type": "MNQ", "start": 2640, "withdraw": 3450, "days": 5}, "15": {"goal": 850, "contracts": 10, "type": "MNQ", "start": 3320, "withdraw": 4300, "days": 5}, "16": {"goal": 1060, "contracts": 10, "type": "MNQ", "start": 4170, "withdraw": 5400, "days": 5}, "17": {"goal": 1300, "contracts": 12, "type": "MNQ", "start": 5230, "withdraw": 6750, "days": 5}, "18": {"goal": 1580, "contracts": 15, "type": "MNQ", "start": 6530, "withdraw": 8400, "days": 5}, "19": {"goal": 2000, "contracts": 20, "type": "MNQ", "start": 8110, "withdraw": 10500, "days": 5}, "20": {"goal": 2500, "contracts": 25, "type": "MNQ", "start": 10110, "withdraw": 13100, "days": 5}, "21": {"goal": 3200, "contracts": 30, "type": "MNQ", "start": 12610, "withdraw": 16400, "days": 5}, "22": {"goal": 4000, "contracts": 4, "type": "NQ", "start": 15810, "withdraw": 20500, "days": 5}, "23": {"goal": 5000, "contracts": 5, "type": "NQ", "start": 19810, "withdraw": 25700, "days": 5}, "24": {"goal": 6200, "contracts": 6, "type": "NQ", "start": 24810, "withdraw": 32000, "days": 5}, "25": {"goal": 7700, "contracts": 7, "type": "NQ", "start": 31010, "withdraw": 40000, "days": 5}, "26": {"goal": 10000, "contracts": 10, "type": "NQ", "start": 38710, "withdraw": 50000, "days": 5}, "27": {"goal": 12500, "contracts": 12, "type": "NQ", "start": 48710, "withdraw": 63000, "days": 5}, "28": {"goal": 15000, "contracts": 15, "type": "NQ", "start": 61210, "withdraw": 77000, "days": 5}, "29": {"goal": 18000, "contracts": 18, "type": "NQ", "start": 76210, "withdraw": 96000, "days": 5}, "30": {"goal": 20000, "contracts": 20, "type": "NQ", "start": 94210, "withdraw": 115000, "days": 5}, "31": {"goal": 22000, "contracts": 22, "type": "NQ", "start": 114210, "withdraw": 136000, "days": 5}, "32": {"goal": 25000, "contracts": 25, "type": "NQ", "start": 136210, "withdraw": 161500, "days": 5}};
-const ids = ['week','weeklyGoal','tradingDays','startBalance','withdrawAbove','contractType','contracts','targetPts','maxLoss','todayProfit','todayLoss','todayWithdrawn'];
+const formIds = ['week','weeklyGoal','tradingDays','startBalance','withdrawAbove','contractType','contracts','targetPts','maxLoss','todayProfit','todayLoss','todayWithdrawn','entryDate','pointsCaptured','endBalanceManual','executionTag','followedPlan','entryNotes'];
+const stateKey = 'liveGoalTrackerUpgradeStateV1';
+const historyKey = 'liveGoalTrackerUpgradeHistoryV1';
+let editingId = null;
+let historyFilter = 'all';
 
 function fmt(n){
   return '$' + Number(n).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
+function getTodayString(){
+  const d = new Date();
+  const off = d.getTimezoneOffset();
+  const local = new Date(d.getTime() - off * 60000);
+  return local.toISOString().slice(0,10);
+}
+
+function openAndScroll(idx){
+  const items = document.querySelectorAll('details');
+  if(items[idx]){ items[idx].open = true; items[idx].scrollIntoView({behavior:'smooth'}); }
+}
+
 function saveState(){
   const state = {};
-  ids.forEach(id => state[id] = document.getElementById(id).value);
-  localStorage.setItem('liveGoalTrackerMobileV1', JSON.stringify(state));
+  formIds.forEach(id => state[id] = document.getElementById(id).value);
+  localStorage.setItem(stateKey, JSON.stringify(state));
 }
 
 function loadState(){
-  const raw = localStorage.getItem('liveGoalTrackerMobileV1');
+  const raw = localStorage.getItem(stateKey);
   if(!raw) return;
   try {
     const state = JSON.parse(raw);
-    ids.forEach(id => {
+    formIds.forEach(id => {
       if(state[id] !== undefined) document.getElementById(id).value = state[id];
     });
   } catch(e) {}
 }
 
-function resetAll(){
-  localStorage.removeItem('liveGoalTrackerMobileV1');
+function getHistory(){
+  const raw = localStorage.getItem(historyKey);
+  if(!raw) return [];
+  try { return JSON.parse(raw); } catch(e) { return []; }
+}
+
+function setHistory(arr){
+  localStorage.setItem(historyKey, JSON.stringify(arr));
+}
+
+function resetCurrentState(){
+  localStorage.removeItem(stateKey);
   location.reload();
+}
+
+function clearEntryForm(){
+  document.getElementById('entryDate').value = getTodayString();
+  document.getElementById('pointsCaptured').value = 0;
+  document.getElementById('todayProfit').value = 0;
+  document.getElementById('todayLoss').value = 0;
+  document.getElementById('todayWithdrawn').value = 0;
+  document.getElementById('endBalanceManual').value = '';
+  document.getElementById('executionTag').value = 'Clean Execution';
+  document.getElementById('followedPlan').value = 'Yes';
+  document.getElementById('entryNotes').value = '';
+  editingId = null;
+  document.getElementById('saveBtn').textContent = 'Save Entry';
+  saveState();
+  calc();
+}
+
+function clearAllHistory(){
+  if(!confirm('Clear all saved history?')) return;
+  localStorage.removeItem(historyKey);
+  renderHistory();
+  updateWeeklySummary();
 }
 
 function loadSuggestedWeek(){
@@ -301,9 +420,6 @@ function loadSuggestedWeek(){
   document.getElementById('startBalance').value = s.start;
   document.getElementById('withdrawAbove').value = s.withdraw;
   document.getElementById('tradingDays').value = s.days;
-  document.getElementById('todayProfit').value = 0;
-  document.getElementById('todayLoss').value = 0;
-  document.getElementById('todayWithdrawn').value = 0;
   document.getElementById('weekQuickSelect').value = wk;
   saveState();
   calc();
@@ -312,6 +428,144 @@ function loadSuggestedWeek(){
 function quickLoad(){
   document.getElementById('week').value = document.getElementById('weekQuickSelect').value;
   loadSuggestedWeek();
+}
+
+function computeCurrentBalance(){
+  const startBalance = Number(document.getElementById('startBalance').value || 0);
+  const todayProfit = Number(document.getElementById('todayProfit').value || 0);
+  const todayLoss = Number(document.getElementById('todayLoss').value || 0);
+  const todayWithdrawn = Number(document.getElementById('todayWithdrawn').value || 0);
+  return startBalance + (todayProfit - todayLoss) - todayWithdrawn;
+}
+
+function saveEntry(){
+  const week = Number(document.getElementById('week').value || 0);
+  const contractType = Number(document.getElementById('contractType').value || 2) === 2 ? 'MNQ' : 'NQ';
+  const contracts = Number(document.getElementById('contracts').value || 0);
+  const points = Number(document.getElementById('pointsCaptured').value || 0);
+  const profit = Number(document.getElementById('todayProfit').value || 0);
+  const loss = Number(document.getElementById('todayLoss').value || 0);
+  const net = profit - loss;
+  const withdrawn = Number(document.getElementById('todayWithdrawn').value || 0);
+  const endBalanceManual = document.getElementById('endBalanceManual').value;
+  const endBalance = endBalanceManual !== '' ? Number(endBalanceManual) : computeCurrentBalance();
+  const followedPlan = document.getElementById('followedPlan').value;
+  const executionTag = document.getElementById('executionTag').value;
+  const notes = document.getElementById('entryNotes').value.trim();
+  const date = document.getElementById('entryDate').value || getTodayString();
+
+  const entry = {
+    id: editingId || 'id_' + Date.now(),
+    date, week, contractType, contracts, points, profit, loss, net, withdrawn, endBalance,
+    followedPlan, executionTag, notes,
+    updatedAt: new Date().toISOString()
+  };
+
+  const history = getHistory();
+  const idx = history.findIndex(x => x.id === entry.id);
+  if(idx >= 0) history[idx] = entry;
+  else history.unshift(entry);
+  setHistory(history);
+
+  editingId = null;
+  document.getElementById('saveBtn').textContent = 'Save Entry';
+  renderHistory();
+  updateWeeklySummary();
+  saveState();
+}
+
+function editEntry(id){
+  const entry = getHistory().find(x => x.id === id);
+  if(!entry) return;
+  editingId = id;
+  document.getElementById('entryDate').value = entry.date || getTodayString();
+  document.getElementById('week').value = entry.week;
+  if(suggested[entry.week]) loadSuggestedWeek();
+  document.getElementById('contractType').value = entry.contractType === 'MNQ' ? 2 : 20;
+  document.getElementById('contracts').value = entry.contracts;
+  document.getElementById('pointsCaptured').value = entry.points;
+  document.getElementById('todayProfit').value = entry.profit;
+  document.getElementById('todayLoss').value = entry.loss;
+  document.getElementById('todayWithdrawn').value = entry.withdrawn;
+  document.getElementById('endBalanceManual').value = entry.endBalance;
+  document.getElementById('followedPlan').value = entry.followedPlan;
+  document.getElementById('executionTag').value = entry.executionTag;
+  document.getElementById('entryNotes').value = entry.notes || '';
+  document.getElementById('saveBtn').textContent = 'Update Entry';
+  calc();
+  openAndScroll(1);
+}
+
+function toggleHistoryFilter(mode){
+  historyFilter = mode;
+  renderHistory();
+}
+
+function renderHistory(){
+  const wrap = document.getElementById('historyList');
+  const currentWeek = Number(document.getElementById('week').value || 0);
+  let items = getHistory();
+  if(historyFilter === 'current') items = items.filter(x => Number(x.week) === currentWeek);
+
+  if(!items.length){
+    wrap.innerHTML = '<div class="empty">No saved entries yet.</div>';
+    return;
+  }
+
+  wrap.innerHTML = items.map(entry => {
+    const tagClass = entry.executionTag === 'Clean Execution' ? 'good' :
+                     entry.executionTag === 'Mistake' || entry.executionTag === 'Revenge' ? 'bad' : 'warn';
+    const planClass = entry.followedPlan === 'Yes' ? 'good' : 'bad';
+    return `
+      <div class="entry-card">
+        <div class="entry-head">
+          <div>
+            <div class="entry-title">${entry.date} · Week ${entry.week}</div>
+            <div class="entry-sub">${entry.contracts} ${entry.contractType} · ${entry.points} pts · End ${fmt(entry.endBalance)}</div>
+          </div>
+          <div style="font-weight:800">${fmt(entry.net)}</div>
+        </div>
+
+        <div class="entry-tags">
+          <span class="tag ${tagClass}">${entry.executionTag}</span>
+          <span class="tag ${planClass}">Plan: ${entry.followedPlan}</span>
+          <span class="tag">Profit ${fmt(entry.profit)}</span>
+          <span class="tag">Loss ${fmt(entry.loss)}</span>
+          <span class="tag">Withdrew ${fmt(entry.withdrawn)}</span>
+        </div>
+
+        ${entry.notes ? `<div class="small-note">${entry.notes.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : ''}
+
+        <div class="entry-actions">
+          <button class="primary" onclick="editEntry('${entry.id}')">Edit Entry</button>
+          <button class="secondary" onclick="document.getElementById('week').value='${entry.week}'; calc(); toggleHistoryFilter('current')">View Week</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateWeeklySummary(){
+  const week = Number(document.getElementById('week').value || 0);
+  const weeklyGoal = Number(document.getElementById('weeklyGoal').value || 0);
+  const items = getHistory().filter(x => Number(x.week) === week);
+
+  const sumProfit = items.reduce((a,b)=>a+Number(b.profit||0),0);
+  const sumLoss = items.reduce((a,b)=>a+Number(b.loss||0),0);
+  const sumNet = items.reduce((a,b)=>a+Number(b.net||0),0);
+  const sumWithdraw = items.reduce((a,b)=>a+Number(b.withdrawn||0),0);
+  const sumPoints = items.reduce((a,b)=>a+Number(b.points||0),0);
+  const pct = weeklyGoal > 0 ? Math.max(0, (sumNet/weeklyGoal)*100) : 0;
+
+  document.getElementById('wkField').textContent = week;
+  document.getElementById('goalField').textContent = fmt(weeklyGoal);
+  document.getElementById('entriesCountField').textContent = items.length;
+  document.getElementById('sumProfitField').textContent = fmt(sumProfit);
+  document.getElementById('sumLossField').textContent = fmt(sumLoss);
+  document.getElementById('sumNetField').textContent = fmt(sumNet);
+  document.getElementById('sumWithdrawField').textContent = fmt(sumWithdraw);
+  document.getElementById('sumPointsField').textContent = sumPoints.toFixed(1) + ' pts';
+  document.getElementById('weekProgressField').textContent = pct.toFixed(0) + '%';
 }
 
 function renderPlan(){
@@ -364,7 +618,6 @@ function calc(){
   const dollarsPerPoint = pointValue * contracts;
   const pointsNeeded = dollarsPerPoint > 0 ? dailyGoal / dollarsPerPoint : 0;
   const tenPointValue = dollarsPerPoint * 10;
-  const endGoalBalance = startBalance + weeklyGoal;
   const todayNet = todayProfit - todayLoss;
   const progress = dailyGoal > 0 ? Math.max(0, Math.min(100, (todayNet / dailyGoal) * 100)) : 0;
   const currentBalance = startBalance + todayNet - todayWithdrawn;
@@ -391,23 +644,17 @@ function calc(){
     statusEl.className = 'status';
   }
 
-  document.getElementById('wkField').textContent = week;
-  document.getElementById('startField').textContent = fmt(startBalance);
-  document.getElementById('goalField').textContent = fmt(weeklyGoal);
-  document.getElementById('endGoalField').textContent = fmt(endGoalBalance);
-  document.getElementById('withdrawField').textContent = fmt(withdrawAbove);
-  document.getElementById('contractsField').textContent = contracts;
-  document.getElementById('typeField').textContent = pointValue === 2 ? 'MNQ' : 'NQ';
-  document.getElementById('targetPtsField').textContent = targetPts + ' pts';
-
   saveState();
+  updateWeeklySummary();
 }
 
 loadState();
+if(!document.getElementById('entryDate').value) document.getElementById('entryDate').value = getTodayString();
 renderPlan();
-ids.forEach(id => document.getElementById(id).addEventListener('input', calc));
 document.getElementById('weekQuickSelect').value = document.getElementById('week').value || 1;
+formIds.forEach(id => document.getElementById(id).addEventListener('input', calc));
 calc();
+renderHistory();
 </script>
 </body>
 </html>
