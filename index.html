@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Live Goal Trading Tracker - Full 32 Weeks</title>
+<style>
+:root{
+  --bg:#0b0d18; --card:#17192f; --card2:#1f2344; --text:#f5f7ff; --muted:#b7bdd8;
+  --accent:#b45cff; --accent2:#22d3ee; --good:#22c55e; --warn:#f59e0b; --bad:#ef4444; --border:#31365e;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#0b0d18,#13162a 40%,#0b0d18);color:var(--text);padding:18px}
+.wrap{max-width:1200px;margin:0 auto}
+.card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25);margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.col-12{grid-column:span 12}
+@media(min-width:900px){ .col-4{grid-column:span 4} .col-6{grid-column:span 6} .col-8{grid-column:span 8} }
+h1,h2,h3{margin:0 0 12px} p{margin:0 0 12px;color:var(--muted)}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 6px}
+input,select{width:100%;background:#0f1226;border:1px solid var(--border);color:var(--text);border-radius:12px;padding:12px 14px;font-size:15px}
+.row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px} .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:700px){ .row,.row3{grid-template-columns:1fr} }
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+@media(min-width:900px){ .kpis{grid-template-columns:repeat(4,1fr)} }
+.pill{background:#0f1226;border:1px solid var(--border);border-radius:16px;padding:14px}
+.pill h3{font-size:13px;color:var(--muted);margin-bottom:6px}
+.value{font-size:26px;font-weight:700}
+.sub{font-size:12px;color:var(--muted);margin-top:4px}
+.status{display:inline-block;padding:8px 12px;border-radius:999px;font-weight:700;margin-top:8px}
+.yes{background:rgba(34,197,94,.15); color:#7ef0a7; border:1px solid rgba(34,197,94,.35)}
+.no{background:rgba(239,68,68,.12); color:#ff9d9d; border:1px solid rgba(239,68,68,.35)}
+.warn{background:rgba(245,158,11,.12); color:#ffd38a; border:1px solid rgba(245,158,11,.35)}
+.progress{height:14px;border-radius:999px;background:#0f1226;border:1px solid var(--border);overflow:hidden;margin-top:10px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s ease}
+table{width:100%;border-collapse:collapse;margin-top:12px;border-radius:14px;overflow:hidden;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 8px;text-align:left}
+th{background:#11142a;color:#dce1ff;position:sticky;top:0}
+.small{font-size:12px;color:var(--muted)}
+button{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer;margin-top:12px;margin-right:8px}
+.mutebtn{background:#0f1226;border:1px solid var(--border)}
+.scrollbox{max-height:360px;overflow:auto;border:1px solid var(--border);border-radius:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Live Goal Trading Tracker</h1>
+    <p>Full 32-week version. Plug in your numbers, load any week from your plan, and your entries save automatically in this browser.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card col-4">
+      <h2>Plan Inputs</h2>
+      <label>Week Number</label>
+      <input id="week" type="number" min="1" max="32" value="1" />
+
+      <div class="row">
+        <div>
+          <label>Weekly Goal ($)</label>
+          <input id="weeklyGoal" type="number" step="0.01" value="10" />
+        </div>
+        <div>
+          <label>Trading Days This Week</label>
+          <input id="tradingDays" type="number" min="1" max="7" value="1" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Start Balance ($)</label>
+          <input id="startBalance" type="number" step="0.01" value="200" />
+        </div>
+        <div>
+          <label>Withdraw Above ($)</label>
+          <input id="withdrawAbove" type="number" step="0.01" value="215" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Contract Type</label>
+          <select id="contractType">
+            <option value="2">MNQ ($2/pt)</option>
+            <option value="20">NQ ($20/pt)</option>
+          </select>
+        </div>
+        <div>
+          <label>Number of Contracts</label>
+          <input id="contracts" type="number" min="1" value="1" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Target Points Per Trade</label>
+          <input id="targetPts" type="number" step="0.1" value="10" />
+        </div>
+        <div>
+          <label>Max Loss Per Day ($)</label>
+          <input id="maxLoss" type="number" step="0.01" value="20" />
+        </div>
+      </div>
+
+      <button onclick="loadSuggestedWeek()">Load Suggested Week</button>
+      <button class="mutebtn" onclick="resetAll()">Reset Saved Data</button>
+    </div>
+
+    <div class="card col-8">
+      <h2>Live Goal</h2>
+      <div class="kpis">
+        <div class="pill">
+          <h3>Daily Goal</h3>
+          <div class="value" id="dailyGoalOut">$0</div>
+          <div class="sub">weekly goal ÷ trading days</div>
+        </div>
+        <div class="pill">
+          <h3>Points Needed Per Day</h3>
+          <div class="value" id="pointsNeededOut">0 pts</div>
+          <div class="sub">daily goal ÷ dollars per point</div>
+        </div>
+        <div class="pill">
+          <h3>$ Per 10 Points</h3>
+          <div class="value" id="tenPointValueOut">$0</div>
+          <div class="sub">contracts × point value × 10</div>
+        </div>
+        <div class="pill">
+          <h3>Weekly End Balance Goal</h3>
+          <div class="value" id="weeklyEndBalanceOut">$0</div>
+          <div class="sub">start balance + weekly goal</div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px">
+        <h3>Today's Progress</h3>
+        <div class="row3">
+          <div>
+            <label>Today's Profit ($)</label>
+            <input id="todayProfit" type="number" step="0.01" value="0" />
+          </div>
+          <div>
+            <label>Today's Loss ($)</label>
+            <input id="todayLoss" type="number" step="0.01" value="0" />
+          </div>
+          <div>
+            <label>Today's Withdrawn ($)</label>
+            <input id="todayWithdrawn" type="number" step="0.01" value="0" />
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="pill">
+            <h3>Today's Net</h3>
+            <div class="value" id="todayNetOut">$0</div>
+          </div>
+          <div class="pill">
+            <h3>Goal Progress</h3>
+            <div class="value" id="progressText">0%</div>
+            <div class="progress"><div class="bar" id="bar"></div></div>
+          </div>
+          <div class="pill">
+            <h3>Current Balance</h3>
+            <div class="value" id="currentBalanceOut">$0</div>
+          </div>
+          <div class="pill">
+            <h3>Can Withdraw Now</h3>
+            <div class="value" id="canWithdrawOut">$0</div>
+          </div>
+        </div>
+        <div id="statusOut" class="status warn">WAITING</div>
+      </div>
+    </div>
+
+    <div class="card col-6">
+      <h2>Weekly Snapshot</h2>
+      <table>
+        <tbody>
+          <tr><th>Week</th><td id="wkField">1</td></tr>
+          <tr><th>Start Balance</th><td id="startField">$200.00</td></tr>
+          <tr><th>Weekly Goal</th><td id="goalField">$10.00</td></tr>
+          <tr><th>Goal End Balance</th><td id="endGoalField">$210.00</td></tr>
+          <tr><th>Withdraw Above</th><td id="withdrawField">$215.00</td></tr>
+          <tr><th>Contracts</th><td id="contractsField">1</td></tr>
+          <tr><th>Contract Type</th><td id="typeField">MNQ</td></tr>
+          <tr><th>Target Points / Trade</th><td id="targetPtsField">10 pts</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card col-6">
+      <h2>Weeks 1–32 Plan</h2>
+      <p class="small">Scroll the full plan below. Use Load Suggested Week to fill the tracker automatically.</p>
+      <div class="scrollbox">
+        <table>
+          <thead>
+            <tr>
+              <th>Week</th><th>Goal</th><th>Contracts</th><th>Type</th><th>Start</th><th>Withdraw Above</th><th>Days</th>
+            </tr>
+          </thead>
+          <tbody id="planTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const suggested = {"1": {"goal": 10, "contracts": 1, "type": "MNQ", "start": 200, "withdraw": 215, "days": 1}, "2": {"goal": 40, "contracts": 1, "type": "MNQ", "start": 210, "withdraw": 260, "days": 5}, "3": {"goal": 50, "contracts": 1, "type": "MNQ", "start": 250, "withdraw": 310, "days": 5}, "4": {"goal": 65, "contracts": 1, "type": "MNQ", "start": 300, "withdraw": 380, "days": 5}, "5": {"goal": 80, "contracts": 1, "type": "MNQ", "start": 365, "withdraw": 460, "days": 5}, "6": {"goal": 100, "contracts": 2, "type": "MNQ", "start": 445, "withdraw": 575, "days": 5}, "7": {"goal": 130, "contracts": 2, "type": "MNQ", "start": 545, "withdraw": 710, "days": 5}, "8": {"goal": 170, "contracts": 3, "type": "MNQ", "start": 675, "withdraw": 890, "days": 5}, "9": {"goal": 215, "contracts": 3, "type": "MNQ", "start": 845, "withdraw": 1120, "days": 5}, "10": {"goal": 270, "contracts": 4, "type": "MNQ", "start": 1060, "withdraw": 1400, "days": 5}, "11": {"goal": 340, "contracts": 4, "type": "MNQ", "start": 1330, "withdraw": 1760, "days": 5}, "12": {"goal": 430, "contracts": 5, "type": "MNQ", "start": 1670, "withdraw": 2200, "days": 5}, "13": {"goal": 540, "contracts": 5, "type": "MNQ", "start": 2100, "withdraw": 2750, "days": 5}, "14": {"goal": 680, "contracts": 8, "type": "MNQ", "start": 2640, "withdraw": 3450, "days": 5}, "15": {"goal": 850, "contracts": 10, "type": "MNQ", "start": 3320, "withdraw": 4300, "days": 5}, "16": {"goal": 1060, "contracts": 10, "type": "MNQ", "start": 4170, "withdraw": 5400, "days": 5}, "17": {"goal": 1300, "contracts": 12, "type": "MNQ", "start": 5230, "withdraw": 6750, "days": 5}, "18": {"goal": 1580, "contracts": 15, "type": "MNQ", "start": 6530, "withdraw": 8400, "days": 5}, "19": {"goal": 2000, "contracts": 20, "type": "MNQ", "start": 8110, "withdraw": 10500, "days": 5}, "20": {"goal": 2500, "contracts": 25, "type": "MNQ", "start": 10110, "withdraw": 13100, "days": 5}, "21": {"goal": 3200, "contracts": 30, "type": "MNQ", "start": 12610, "withdraw": 16400, "days": 5}, "22": {"goal": 4000, "contracts": 4, "type": "NQ", "start": 15810, "withdraw": 20500, "days": 5}, "23": {"goal": 5000, "contracts": 5, "type": "NQ", "start": 19810, "withdraw": 25700, "days": 5}, "24": {"goal": 6200, "contracts": 6, "type": "NQ", "start": 24810, "withdraw": 32000, "days": 5}, "25": {"goal": 7700, "contracts": 7, "type": "NQ", "start": 31010, "withdraw": 40000, "days": 5}, "26": {"goal": 10000, "contracts": 10, "type": "NQ", "start": 38710, "withdraw": 50000, "days": 5}, "27": {"goal": 12500, "contracts": 12, "type": "NQ", "start": 48710, "withdraw": 63000, "days": 5}, "28": {"goal": 15000, "contracts": 15, "type": "NQ", "start": 61210, "withdraw": 77000, "days": 5}, "29": {"goal": 18000, "contracts": 18, "type": "NQ", "start": 76210, "withdraw": 96000, "days": 5}, "30": {"goal": 20000, "contracts": 20, "type": "NQ", "start": 94210, "withdraw": 115000, "days": 5}, "31": {"goal": 22000, "contracts": 22, "type": "NQ", "start": 114210, "withdraw": 136000, "days": 5}, "32": {"goal": 25000, "contracts": 25, "type": "NQ", "start": 136210, "withdraw": 161500, "days": 5}};
+const ids = ['week','weeklyGoal','tradingDays','startBalance','withdrawAbove','contractType','contracts','targetPts','maxLoss','todayProfit','todayLoss','todayWithdrawn'];
+
+function fmt(n){
+  return '$' + Number(n).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function saveState(){
+  const state = {};
+  ids.forEach(id => state[id] = document.getElementById(id).value);
+  localStorage.setItem('liveGoalTrackerStateV2', JSON.stringify(state));
+}
+
+function loadState(){
+  const raw = localStorage.getItem('liveGoalTrackerStateV2');
+  if(!raw) return;
+  try {
+    const state = JSON.parse(raw);
+    ids.forEach(id => {
+      if(state[id] !== undefined) document.getElementById(id).value = state[id];
+    });
+  } catch(e) {}
+}
+
+function resetAll(){
+  localStorage.removeItem('liveGoalTrackerStateV2');
+  location.reload();
+}
+
+function loadSuggestedWeek(){
+  const wk = Number(document.getElementById('week').value);
+  if(!suggested[wk]) return;
+  const s = suggested[wk];
+  document.getElementById('weeklyGoal').value = s.goal;
+  document.getElementById('contracts').value = s.contracts;
+  document.getElementById('contractType').value = s.type === 'MNQ' ? 2 : 20;
+  document.getElementById('startBalance').value = s.start;
+  document.getElementById('withdrawAbove').value = s.withdraw;
+  document.getElementById('tradingDays').value = s.days;
+  document.getElementById('todayProfit').value = 0;
+  document.getElementById('todayLoss').value = 0;
+  document.getElementById('todayWithdrawn').value = 0;
+  saveState();
+  calc();
+}
+
+function calc(){
+  const week = Number(document.getElementById('week').value || 0);
+  const weeklyGoal = Number(document.getElementById('weeklyGoal').value || 0);
+  const tradingDays = Math.max(1, Number(document.getElementById('tradingDays').value || 1));
+  const startBalance = Number(document.getElementById('startBalance').value || 0);
+  const withdrawAbove = Number(document.getElementById('withdrawAbove').value || 0);
+  const pointValue = Number(document.getElementById('contractType').value || 2);
+  const contracts = Math.max(1, Number(document.getElementById('contracts').value || 1));
+  const targetPts = Number(document.getElementById('targetPts').value || 0);
+  const maxLoss = Number(document.getElementById('maxLoss').value || 0);
+  const todayProfit = Number(document.getElementById('todayProfit').value || 0);
+  const todayLoss = Number(document.getElementById('todayLoss').value || 0);
+  const todayWithdrawn = Number(document.getElementById('todayWithdrawn').value || 0);
+
+  const dailyGoal = weeklyGoal / tradingDays;
+  const dollarsPerPoint = pointValue * contracts;
+  const pointsNeeded = dollarsPerPoint > 0 ? dailyGoal / dollarsPerPoint : 0;
+  const tenPointValue = dollarsPerPoint * 10;
+  const endGoalBalance = startBalance + weeklyGoal;
+  const todayNet = todayProfit - todayLoss;
+  const progress = dailyGoal > 0 ? Math.max(0, Math.min(100, (todayNet / dailyGoal) * 100)) : 0;
+  const currentBalance = startBalance + todayNet - todayWithdrawn;
+  const canWithdraw = Math.max(0, currentBalance - withdrawAbove);
+
+  document.getElementById('dailyGoalOut').textContent = fmt(dailyGoal);
+  document.getElementById('pointsNeededOut').textContent = pointsNeeded.toFixed(1) + ' pts';
+  document.getElementById('tenPointValueOut').textContent = fmt(tenPointValue);
+  document.getElementById('weeklyEndBalanceOut').textContent = fmt(endGoalBalance);
+  document.getElementById('todayNetOut').textContent = fmt(todayNet);
+  document.getElementById('progressText').textContent = progress.toFixed(0) + '%';
+  document.getElementById('bar').style.width = progress + '%';
+  document.getElementById('currentBalanceOut').textContent = fmt(currentBalance);
+  document.getElementById('canWithdrawOut').textContent = fmt(canWithdraw);
+
+  const statusEl = document.getElementById('statusOut');
+  if(todayLoss >= maxLoss && maxLoss > 0){
+    statusEl.textContent = 'STOP — LOSS LIMIT';
+    statusEl.className = 'status no';
+  } else if(todayNet >= dailyGoal && dailyGoal > 0){
+    statusEl.textContent = 'GOAL HIT — STOP';
+    statusEl.className = 'status yes';
+  } else {
+    statusEl.textContent = 'ALLOWED TO TRADE';
+    statusEl.className = 'status warn';
+  }
+
+  document.getElementById('wkField').textContent = week;
+  document.getElementById('startField').textContent = fmt(startBalance);
+  document.getElementById('goalField').textContent = fmt(weeklyGoal);
+  document.getElementById('endGoalField').textContent = fmt(endGoalBalance);
+  document.getElementById('withdrawField').textContent = fmt(withdrawAbove);
+  document.getElementById('contractsField').textContent = contracts;
+  document.getElementById('typeField').textContent = pointValue === 2 ? 'MNQ' : 'NQ';
+  document.getElementById('targetPtsField').textContent = targetPts + ' pts';
+  saveState();
+}
+
+function renderPlanTable(){
+  const tbody = document.getElementById('planTable');
+  tbody.innerHTML = '';
+  Object.entries(suggested).forEach(([wk,v]) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${wk}</td><td>${fmt(v.goal)}</td><td>${v.contracts}</td><td>${v.type}</td><td>${fmt(v.start)}</td><td>${fmt(v.withdraw)}</td><td>${v.days}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+loadState();
+renderPlanTable();
+ids.forEach(id => document.getElementById(id).addEventListener('input', calc));
+calc();
+</script>
+</body>
+</html>
